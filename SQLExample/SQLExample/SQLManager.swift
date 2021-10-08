@@ -12,8 +12,9 @@ class SQLManager {
     
     static let shared = SQLManager()
     
-    var db: Connection?
-
+    open private(set) var db: Connection!
+    
+    /// 获取/设置数据库的User Version
     var userVersion: Int32 {
         get {
             do {
@@ -31,7 +32,8 @@ class SQLManager {
             }
         }
     }
-
+    
+    /// 连接SQLite数据库
     func connectDataBase() {
         guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory,
                                                              .userDomainMask,
@@ -43,8 +45,8 @@ class SQLManager {
         
         do {
             db = try Connection("\(path)/db.sqlite3")
-            db?.busyTimeout = 5
-            db?.busyHandler { tries in
+            db.busyTimeout = 5
+            db.busyHandler { tries in
                 tries < 3
             }
             createUserTable(db)
@@ -60,10 +62,6 @@ class SQLManager {
     ///   - column: String
     /// - Returns: Bool
     func columns(table: String, column: String) -> Bool {
-        guard let db = db else {
-            return false
-        }
-        
         do {
             var columns: [String] = []
             let statement = try db.prepare("PRAGMA table_info(" + table + ")")
