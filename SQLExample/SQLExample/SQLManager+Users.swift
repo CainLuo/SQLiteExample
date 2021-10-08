@@ -131,8 +131,8 @@ extension SQLManager {
                                                    balance: user[balance], verified: user[verified],
                                                    name: user[name]!, gender: user[gender]!, chat: chatSetting))
                         }
-//                        print("User: \(user[index]), \(user[email]), \(String(describing: user[name])), \(user[balance]), \(user[verified]), \(String(describing: user[gender]))")
                     })
+                    print(userInfos.count)
                     complete(userInfos)
                 } catch {
                     print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
@@ -202,6 +202,17 @@ extension SQLManager {
             }
         } catch {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
+        }
+    }
+    
+    /// 获取Users表的行数
+    /// - Returns: Int
+    func getUserCount() -> Int {
+        do {
+            return try db.scalar(users.count)
+        } catch {
+            print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
+            return 0
         }
     }
 }
