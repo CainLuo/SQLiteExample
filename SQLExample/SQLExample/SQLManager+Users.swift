@@ -153,13 +153,18 @@ extension SQLManager {
     
     /// 获取Users表指定邮箱的用户
     /// - Parameter uEmail: String
-    func filterUserInfo(_ uEmail: String) {
+    func filterUserInfo(_ uEmail: String, complete: ((_ userMode: UserModel) -> Void)) {
         // filter和where是一样的效果
-//        let query = users.filter(email == uEmail)
-        let query = users.where(email == uEmail)
+        let query = users.filter(email == uEmail)
+//        let query = users.where(email == uEmail)
 
         do {
             try db?.prepare(query).forEach({ user in
+                getChatSetting(user[userID]) { chatSetting in
+                    complete(UserModel(userID: user[userID], email: user[email],
+                                       balance: user[balance], verified: user[verified],
+                                       name: user[name]!, gender: user[gender]!, chat: chatSetting))
+                }
                 print("User: \(user[index]), \(user[email]), \(String(describing: user[name])), \(user[balance]), \(user[verified]), \(String(describing: user[gender]))")
             })
         } catch {
