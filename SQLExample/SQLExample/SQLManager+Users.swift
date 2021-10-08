@@ -23,11 +23,7 @@ fileprivate let gender   = Expression<String?>("gender")
 extension SQLManager {
     /// 创建用户表
     /// - Parameter db: Connection
-    func createUserTable(_ db: Connection?) {
-        guard let db = db else {
-            return
-        }
-        
+    func createUserTable(_ db: Connection) {
         do {
             try db.run(users.create(ifNotExists: true) { t in
                 // autoincrement：自动递增
@@ -53,7 +49,7 @@ extension SQLManager {
         }
         
         do {
-            try db?.run(users.addColumn(gender))
+            try db.run(users.addColumn(gender))
             userVersion += 1
         } catch {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
@@ -67,7 +63,7 @@ extension SQLManager {
     ///   - uGender: String
     func addUserInfo(_ model: UserModel) {
         do {
-            try db?.run(users.insert(userID <- model.userID, email <- model.email, name <- model.name, gender <- model.gender))
+            try db.run(users.insert(userID <- model.userID, email <- model.email, name <- model.name, gender <- model.gender))
             if let chat = model.chat {
                 insetChatSetings(model.userID, chat: chat)
             }
@@ -81,10 +77,10 @@ extension SQLManager {
     func addUserInfos(_ models: [UserModel]) {
         do {
             // 开启SQLite的事务
-            try db?.transaction {
+            try db.transaction {
                 models.forEach { model in
                     do {
-                        try db?.run(users.insert(userID <- model.userID, email <- model.email, name <- model.name, gender <- model.gender))
+                        try db.run(users.insert(userID <- model.userID, email <- model.email, name <- model.name, gender <- model.gender))
                         if let chat = model.chat {
                             insetChatSetings(model.userID, chat: chat)
                         }
@@ -106,10 +102,10 @@ extension SQLManager {
     func updateUserInfo(_ model: UserModel) {
         do {
             // 开启SQLite的事务
-            try db?.transaction {
+            try db.transaction {
                 do {
                     let user = users.filter(userID == model.userID)
-                    try db?.run(user.update(userID <- model.userID, email <- model.email, name <- model.name, gender <- model.gender))
+                    try db.run(user.update(userID <- model.userID, email <- model.email, name <- model.name, gender <- model.gender))
                     if let chat = model.chat {
                         updateChatSetting(model.userID, chat: chat)
                     }
@@ -123,13 +119,21 @@ extension SQLManager {
     }
     
     /// 遍地Users表的所有用户
-    func filterUsers() {
+    func filterUsers(_ complete: ((_ userMode: [UserModel]) -> Void)) {
         do {
-            try db?.transaction {
+            try db.transaction {
                 do {
-                    try db?.prepare(users).forEach({ user in
-                        print("User: \(user[index]), \(user[email]), \(String(describing: user[name])), \(user[balance]), \(user[verified]), \(String(describing: user[gender]))")
+                    var userInfos: [UserModel] = []
+                    try db.prepare(users).forEach({ user in
+
+                        getChatSetting(user[userID]) { chatSetting in
+                            userInfos.append(UserModel(userID: user[userID], email: user[email],
+                                                   balance: user[balance], verified: user[verified],
+                                                   name: user[name]!, gender: user[gender]!, chat: chatSetting))
+                        }
+//                        print("User: \(user[index]), \(user[email]), \(String(describing: user[name])), \(user[balance]), \(user[verified]), \(String(describing: user[gender]))")
                     })
+                    complete(userInfos)
                 } catch {
                     print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
                 }
@@ -143,7 +147,7 @@ extension SQLManager {
     func filterEmails() {
         let query = users.select(email)
         do {
-            try db?.prepare(query).forEach({ user in
+            try db.prepare(query).forEach({ user in
                 print("User: \(user[email]))")
             })
         } catch {
@@ -159,7 +163,7 @@ extension SQLManager {
 //        let query = users.where(email == uEmail)
 
         do {
-            try db?.prepare(query).forEach({ user in
+            try db.prepare(query).forEach({ user in
                 getChatSetting(user[userID]) { chatSetting in
                     complete(UserModel(userID: user[userID], email: user[email],
                                        balance: user[balance], verified: user[verified],
@@ -174,11 +178,9 @@ extension SQLManager {
     
     /// 删除所有用户信息
     func removeAllUsers() {
-        guard let db = db else {
-            return
-        }
         do {
             if try db.run(users.delete()) > 0 {
+                removeAll()
                 print("👍🏻👍🏻👍🏻 -------------- 删除所有用户成功 -------------- 👍🏻👍🏻👍🏻")
             } else {
                 print("💥💥💥 -------------- 没有找到对应得用户 -------------- 💥💥💥")
@@ -192,9 +194,6 @@ extension SQLManager {
     /// - Parameter uEmail: String
     func removeUser(_ uEmail: String) {
         let userInfo = users.filter(email == uEmail)
-        guard let db = db else {
-            return
-        }
         do {
             if try db.run(userInfo.delete()) > 0 {
                 print("👍🏻👍🏻👍🏻 -------------- 删除所有用户成功 -------------- 👍🏻👍🏻👍🏻")
