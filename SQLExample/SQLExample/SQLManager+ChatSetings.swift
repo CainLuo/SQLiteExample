@@ -9,7 +9,7 @@ import Foundation
 import SQLite
 
 // Table
-fileprivate let chatSetings = Table("chatSetings")
+fileprivate let chatSetings = Table("usersChatSetings")
 
 // Expressions
 fileprivate let id    = Expression<String>("id")
