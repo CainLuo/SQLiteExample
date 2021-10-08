@@ -48,7 +48,9 @@ class ViewController: UIViewController {
     
     @IBAction func filterUserInfo() {
 //        SQLManager.shared.filterUserInfo()
-        SQLManager.shared.filterUserInfo("5@163.com")
+        SQLManager.shared.filterUserInfo("5@163.com") { userModel in
+            print(userModel)
+        }
     }
     
     @IBAction func filterUsers() {
