@@ -12,13 +12,13 @@ import SQLite
 fileprivate let users = Table("users")
 
 // Expressions
-fileprivate let index = Expression<Int64>("index")
-fileprivate let userID = Expression<String>("userID")
-fileprivate let email = Expression<String>("email")
-fileprivate let balance = Expression<Double>("balance")
+fileprivate let index    = Expression<Int64>("index")
+fileprivate let balance  = Expression<Double>("balance")
 fileprivate let verified = Expression<Bool>("verified")
-fileprivate let name = Expression<String?>("name")
-fileprivate let gender = Expression<String?>("gender")
+fileprivate let userID   = Expression<String>("userID")
+fileprivate let email    = Expression<String>("email")
+fileprivate let name     = Expression<String?>("name")
+fileprivate let gender   = Expression<String?>("gender")
 
 extension SQLManager {
     /// 创建用户表
