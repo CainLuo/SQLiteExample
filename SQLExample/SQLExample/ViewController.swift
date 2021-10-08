@@ -63,7 +63,8 @@ class ViewController: UIViewController {
     }
     
     @IBAction func deleteUsers() {
-        SQLManager.shared.removeAllUsers()
+//        SQLManager.shared.removeAllUsers()
+        print(SQLManager.shared.getUserCount())
     }
     
     @IBAction func deleteUser() {
