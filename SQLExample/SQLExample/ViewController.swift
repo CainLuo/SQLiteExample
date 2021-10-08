@@ -32,7 +32,8 @@ class ViewController: UIViewController {
         
         Array(1...10000)
             .forEach { index in
-                infos.append(UserModel(userID: "\(index + 1000)", email: "\(index)@163.com", name: "\(index)", gender: "男"))
+                let chat = UserChatSettingModel(price: "\(index + 10)")
+                infos.append(UserModel(userID: "\(index + 1000)", email: "\(index)@163.com", name: "\(index)", gender: "男", chat: chat))
         }
         
         SQLManager.shared.addUserInfos(infos)
@@ -41,7 +42,8 @@ class ViewController: UIViewController {
     }
     
     @IBAction func updateUserInfo() {
-        SQLManager.shared.updateUserInfo(UserModel(userID: "1001", name: "嘻嘻嘻", gender: "女"))
+        let chat = UserChatSettingModel(price: "19999")
+        SQLManager.shared.updateUserInfo(UserModel(userID: "1001", email: "-1@163.com", name: "嘻嘻嘻", gender: "女", chat: chat))
     }
     
     @IBAction func filterUserInfo() {
