@@ -1,0 +1,22 @@
+PODS:
+  - ObjectMapper (4.2.0)
+  - SQLite.swift (0.13.0):
+    - SQLite.swift/standard (= 0.13.0)
+  - SQLite.swift/standard (0.13.0)
+
+DEPENDENCIES:
+  - ObjectMapper
+  - SQLite.swift
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - ObjectMapper
+    - SQLite.swift
+
+SPEC CHECKSUMS:
+  ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
+  SQLite.swift: 8add701609fd0ef78d097dcc75d20a9782e6f5fc
+
+PODFILE CHECKSUM: 0750e2043bebe6d2bb29f23d67a05062cd194fd7
+
+COCOAPODS: 1.11.2

@@ -1,0 +1,18 @@
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '11.0'
+
+use_frameworks!
+inhibit_all_warnings!
+install! 'cocoapods',
+         disable_input_output_paths: true,
+         generate_multiple_pod_projects: true
+
+target 'SQLExample' do
+  # Comment the next line if you don't want to use dynamic frameworks
+
+  # Pods for SQLExample
+  
+  pod 'SQLite.swift'
+  pod 'ObjectMapper'
+
+end

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SQLExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="d1l-iR-MDL">
+                                <rect key="frame" x="145.5" y="284" width="123" height="338"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ied-zZ-KIJ">
+                                        <rect key="frame" x="0.0" y="0.0" width="123" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="KJW-kV-d2A"/>
+                                        </constraints>
+                                        <state key="normal" title="插入Gender行"/>
+                                        <connections>
+                                            <action selector="insetColumn" destination="BYZ-38-t0r" eventType="touchUpInside" id="vhZ-hr-tgf"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OcI-xX-VTO">
+                                        <rect key="frame" x="0.0" y="49" width="123" height="44"/>
+                                        <state key="normal" title="插入用户数据"/>
+                                        <connections>
+                                            <action selector="addUserInfo" destination="BYZ-38-t0r" eventType="touchUpInside" id="1Ia-Sq-Ltm"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ydd-Jw-aot">
+                                        <rect key="frame" x="0.0" y="98" width="123" height="44"/>
+                                        <state key="normal" title="更新用户数据"/>
+                                        <connections>
+                                            <action selector="updateUserInfo" destination="BYZ-38-t0r" eventType="touchUpInside" id="OO0-Oe-tiv"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Yi-LX-o6L">
+                                        <rect key="frame" x="0.0" y="147" width="123" height="44"/>
+                                        <state key="normal" title="获取单个用户数据"/>
+                                        <connections>
+                                            <action selector="filterUserInfo" destination="BYZ-38-t0r" eventType="touchUpInside" id="dYF-Mj-mEV"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Myb-rv-HQx">
+                                        <rect key="frame" x="0.0" y="196" width="123" height="44"/>
+                                        <state key="normal" title="获取所有用户数据"/>
+                                        <connections>
+                                            <action selector="filterUsers" destination="BYZ-38-t0r" eventType="touchUpInside" id="3pt-Cy-JJX"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGm-6M-WU7">
+                                        <rect key="frame" x="0.0" y="245" width="123" height="44"/>
+                                        <state key="normal" title="删除所有用户数据"/>
+                                        <connections>
+                                            <action selector="deleteUsers" destination="BYZ-38-t0r" eventType="touchUpInside" id="JhA-U5-nIj"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9W1-JP-Kjt">
+                                        <rect key="frame" x="0.0" y="294" width="123" height="44"/>
+                                        <state key="normal" title="删除指定用户数据"/>
+                                        <connections>
+                                            <action selector="deleteUser" destination="BYZ-38-t0r" eventType="touchUpInside" id="gsP-3W-WVK"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="d1l-iR-MDL" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="5Rr-S7-6Up"/>
+                            <constraint firstItem="d1l-iR-MDL" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="bhq-EH-gvF"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="30" y="84"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
