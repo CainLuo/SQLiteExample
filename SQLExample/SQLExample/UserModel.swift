@@ -15,6 +15,8 @@ struct UserModel {
     var verified = false
     var name = ""
     var gender = ""
+    
+    var chat: UserChatSettingModel?
 }
 
 extension UserModel: Mappable {
@@ -28,5 +30,19 @@ extension UserModel: Mappable {
         verified <- map["verified"]
         name <- map["name"]
         gender <- map["gender"]
+        chat <- map["chat"]
+    }
+}
+
+struct UserChatSettingModel {
+    var price = ""
+}
+
+extension UserChatSettingModel: Mappable {
+    init?(map: Map) {
+    }
+    
+    mutating func mapping(map: Map) {
+        price <- map["price"]
     }
 }
