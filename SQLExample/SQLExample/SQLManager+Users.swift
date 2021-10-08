@@ -67,7 +67,10 @@ extension SQLManager {
     ///   - uGender: String
     func addUserInfo(_ model: UserModel) {
         do {
-            try db?.run(users.insert(email <- model.email, name <- model.name, gender <- model.gender))
+            try db?.run(users.insert(userID <- model.userID, email <- model.email, name <- model.name, gender <- model.gender))
+            if let chat = model.chat {
+                insetChatSetings(model.userID, chat: chat)
+            }
         } catch {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
@@ -82,6 +85,9 @@ extension SQLManager {
                 models.forEach { model in
                     do {
                         try db?.run(users.insert(userID <- model.userID, email <- model.email, name <- model.name, gender <- model.gender))
+                        if let chat = model.chat {
+                            insetChatSetings(model.userID, chat: chat)
+                        }
                     } catch {
                         print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
                     }
@@ -99,7 +105,18 @@ extension SQLManager {
     ///   - uGender: String
     func updateUserInfo(_ model: UserModel) {
         do {
-            try db?.run(users.update(email <- model.email, name <- model.name, gender <- model.gender))
+            // 开启SQLite的事务
+            try db?.transaction {
+                do {
+                    let user = users.filter(userID == model.userID)
+                    try db?.run(user.update(userID <- model.userID, email <- model.email, name <- model.name, gender <- model.gender))
+                    if let chat = model.chat {
+                        updateChatSetting(model.userID, chat: chat)
+                    }
+                } catch {
+                    print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
+                }
+            }
         } catch {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
@@ -169,12 +186,12 @@ extension SQLManager {
     /// 删除指定邮箱的用户信息
     /// - Parameter uEmail: String
     func removeUser(_ uEmail: String) {
-        let uEmail = users.filter(email == uEmail)
+        let userInfo = users.filter(email == uEmail)
         guard let db = db else {
             return
         }
         do {
-            if try db.run(uEmail.delete()) > 0 {
+            if try db.run(userInfo.delete()) > 0 {
                 print("👍🏻👍🏻👍🏻 -------------- 删除所有用户成功 -------------- 👍🏻👍🏻👍🏻")
             } else {
                 print("💥💥💥 -------------- 没有找到对应得用户 -------------- 💥💥💥")
