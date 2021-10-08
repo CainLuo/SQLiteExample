@@ -18,11 +18,7 @@ fileprivate let price = Expression<String>("price")
 extension SQLManager {
     /// 创建用户表
     /// - Parameter db: Connection
-    func createChatSettingsTable(_ db: Connection?) {
-        guard let db = db else {
-            return
-        }
-        
+    func createChatSettingsTable(_ db: Connection) {
         do {
             try db.run(chatSetings.create(ifNotExists: true) { t in
                 // autoincrement：自动递增
@@ -41,7 +37,7 @@ extension SQLManager {
     ///   - chat: UserChatSettingModel
     func insetChatSetings(_ userID: String, chat: UserChatSettingModel) {
         do {
-            try db?.run(chatSetings.insert(id <- userID, price <- chat.price))
+            try db.run(chatSetings.insert(id <- userID, price <- chat.price))
         } catch {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
@@ -54,7 +50,7 @@ extension SQLManager {
     func updateChatSetting(_ userID: String, chat: UserChatSettingModel) {
         let user = chatSetings.filter(id == userID)
         do {
-            try db?.run(user.update(id <- userID, price <- chat.price))
+            try db.run(user.update(id <- userID, price <- chat.price))
         } catch {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
@@ -64,9 +60,6 @@ extension SQLManager {
     /// - Parameter userID: String
     func deleteChatSeting(_ userID: String) {
         let userInfo = chatSetings.filter(id == userID)
-        guard let db = db else {
-            return
-        }
         do {
             if try db.run(userInfo.delete()) > 0 {
                 print("👍🏻👍🏻👍🏻 -------------- 删除所有用户成功 -------------- 👍🏻👍🏻👍🏻")
@@ -83,9 +76,22 @@ extension SQLManager {
     func getChatSetting(_ userID: String, complete: ((_ chatSetting: UserChatSettingModel) -> Void)) {
         let query = chatSetings.filter(id == userID)
         do {
-            try db?.prepare(query).forEach({ user in
+            try db.prepare(query).forEach({ user in
                 complete(UserChatSettingModel(price: user[price]))
             })
+        } catch {
+            print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
+        }
+    }
+    
+    /// 删除ChatSettings所有的子信息
+    func removeAll() {
+        do {
+            if try db.run(chatSetings.delete()) > 0 {
+                print("👍🏻👍🏻👍🏻 -------------- 删除所有用户成功 -------------- 👍🏻👍🏻👍🏻")
+            } else {
+                print("💥💥💥 -------------- 没有找到对应得用户 -------------- 💥💥💥")
+            }
         } catch {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
