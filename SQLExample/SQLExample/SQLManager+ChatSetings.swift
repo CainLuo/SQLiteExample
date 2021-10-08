@@ -77,4 +77,17 @@ extension SQLManager {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
     }
+    
+    /// 获取ChatSettings表的子信息
+    /// - Parameter userID: String
+    func getChatSetting(_ userID: String, complete: ((_ chatSetting: UserChatSettingModel) -> Void)) {
+        let query = chatSetings.filter(id == userID)
+        do {
+            try db?.prepare(query).forEach({ user in
+                complete(UserChatSettingModel(price: user[price]))
+            })
+        } catch {
+            print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
+        }
+    }
 }
