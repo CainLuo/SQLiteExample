@@ -1,13 +1,13 @@
 # SQLite.swift 文档
 
 
-### 手册
+### 手动安装
 
 要将SQLite.swift安装为Xcode的一个子项目。
 
  1. 拖动**SQLite.xcodeproj**文件到你自己的项目中。([子模块](http://git-scm.com/book/en/Git-Tools-Submodules), 克隆，或[下载](https://github.com/stephencelis/SQLite.swift/archive/master.zip)该项目首先。)
 
-![安装屏幕截图](Resources/installation@2x.png)
+![安装屏幕截图](https://github.com/stephencelis/SQLite.swift/blob/master/Documentation/Resources/installation@2x.png)
 
  2. 在你的目标的**常规**标签中，点击**链接的框架和库下的**+**按钮。
 
