@@ -54,12 +54,13 @@ class ViewController: UIViewController {
     }
     
     @IBAction func filterUsers() {
-        print("开始获取用户信息")
-        let start = CACurrentMediaTime()
-        SQLManager.shared.filterUsers { users in
-            print(users)
-        }
-        print("结束获取用户信息: \(CACurrentMediaTime() - start)")
+//        print("开始获取用户信息")
+//        let start = CACurrentMediaTime()
+//        SQLManager.shared.filterUsers { users in
+//            print(users)
+//        }
+//        print("结束获取用户信息: \(CACurrentMediaTime() - start)")
+        SQLManager.shared.filterUserAndChat("1002")
     }
     
     @IBAction func deleteUsers() {
