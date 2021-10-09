@@ -95,4 +95,11 @@ extension SQLManager {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
     }
+    
+    /// 使用Row转换成具体的模型
+    /// - Parameter row: Row
+    /// - Returns: UserChatSettingModel
+    func getChatSetting(_ row: Row) -> UserChatSettingModel {
+        UserChatSettingModel(price: row[price])
+    }
 }
