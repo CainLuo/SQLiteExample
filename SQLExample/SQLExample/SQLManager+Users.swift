@@ -216,11 +216,30 @@ extension SQLManager {
 
     /// 获取users表和usersChatSetings里等于id的用户数据
     /// - Parameter id: String
-    func filterUserAndChat(_ id: String) {
+    func filterUserAndChat(_ id: String) -> UserModel? {
         let query = users.join(usersChatSetings, on: users[userID] == id && usersChatSetings[userID] == id)
         do {
-            let row = try db.pluck(query)
-            print(row as Any)
+            if let user = try db.pluck(query) {
+                let chatSetting = getChatSetting(user)
+                return UserModel(userID: user[users[userID]], email: user[email],
+                                 balance: user[balance], verified: user[verified],
+                                 name: user[name]!, gender: user[gender]!, chat: chatSetting)
+            }
+        } catch {
+            print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
+        }
+        return nil
+    }
+    
+    /// 使用order对users表进行排序，desc：降序，asc：升序
+    func sortUsers() {
+        let query = users.order(userID.desc)
+        do {
+            try db.prepare(query).forEach({ user in
+                print(UserModel(userID: user[userID], email: user[email],
+                                balance: user[balance], verified: user[verified],
+                                name: user[name]!, gender: user[gender]!))
+            })
         } catch {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
