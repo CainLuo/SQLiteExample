@@ -567,14 +567,14 @@ users.join(posts, on: user_id == users[id])
 
 ##### 列名间距
 
-当连接表时，列名可能变得模糊不清。例如_，两个表都可能有一个`id`列。
+当连接表时，列名可能变得模糊不清。例如，两个表都可能有一个id列。
 
 ```swift
 let query = users.join(posts, on: user_id == id)
 // assertion failure: ambiguous column 'id'
 ```
 
-我们可以通过对 "id "进行命名来消除歧义。
+我们可以通过对`id`进行命名来消除歧义。
 
 ```swift
 let query = users.join(posts, on: user_id == users[id])
@@ -583,7 +583,7 @@ let query = users.join(posts, on: user_id == users[id])
 
 命名是通过用[列表达式](#表达式)对[查询](#查询)进行下标来实现的（例如_，上面的`users[id]`变成`users.id`）。
 
-> 注意：我们可以使用 "*"对一个表的所有列进行命名。
+> 注意：我们可以使用`*`对一个表的所有列进行命名。
 >```swift
 > let query = users.select(users[*])
 > // SELECT "users".* FROM "users"
