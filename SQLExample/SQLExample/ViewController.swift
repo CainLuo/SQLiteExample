@@ -30,7 +30,7 @@ class ViewController: UIViewController {
         
         var infos: [UserModel] = []
         
-        Array(1...20)
+        Array(1...10000)
             .forEach { index in
                 let chat = UserChatSettingModel(price: "\(index + 10)")
                 infos.append(UserModel(userID: "\(index + 1000)", email: "\(index)@163.com", name: "\(index)", gender: "男", chat: chat))
@@ -79,6 +79,7 @@ class ViewController: UIViewController {
     
     @IBAction func deleteUser() {
 //        SQLManager.shared.removeUser("1@163.com")
-        SQLManager.shared.sortUsers()
+//        SQLManager.shared.sortUsers()
+        SQLManager.shared.insetMore()
     }
 }
