@@ -14,6 +14,10 @@ class SQLManager {
     
     open private(set) var db: Connection!
     
+    // Table
+    let users = Table("users")
+    let usersChatSetings = Table("usersChatSetings")
+    
     /// 获取/设置数据库的User Version
     var userVersion: Int32 {
         get {
