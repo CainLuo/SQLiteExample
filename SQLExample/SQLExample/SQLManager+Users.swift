@@ -8,8 +8,6 @@
 import Foundation
 import SQLite
 
-// Table
-fileprivate let users = Table("users")
 
 // Expressions
 fileprivate let index    = Expression<Int64>("index")
@@ -213,6 +211,18 @@ extension SQLManager {
         } catch {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
             return 0
+        }
+    }
+
+    /// 获取users表和usersChatSetings里等于id的用户数据
+    /// - Parameter id: String
+    func filterUserAndChat(_ id: String) {
+        let query = users.join(usersChatSetings, on: users[userID] == id && usersChatSetings[userID] == id)
+        do {
+            let row = try db.pluck(query)
+            print(row as Any)
+        } catch {
+            print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
     }
 }
