@@ -30,7 +30,7 @@ class ViewController: UIViewController {
         
         var infos: [UserModel] = []
         
-        Array(1...100)
+        Array(1...20)
             .forEach { index in
                 let chat = UserChatSettingModel(price: "\(index + 10)")
                 infos.append(UserModel(userID: "\(index + 1000)", email: "\(index)@163.com", name: "\(index)", gender: "男", chat: chat))
@@ -53,22 +53,32 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func filterJoinUserInfo() {
+        print("开始获取用户信息")
+        
+        let start = CACurrentMediaTime()
+        if let userModle = SQLManager.shared.filterUserAndChat("1002") {
+            print(userModle)
+        }
+        
+        print("结束获取用户信息: \(CACurrentMediaTime() - start)")
+    }
+
     @IBAction func filterUsers() {
-//        print("开始获取用户信息")
-//        let start = CACurrentMediaTime()
-//        SQLManager.shared.filterUsers { users in
-//            print(users)
-//        }
-//        print("结束获取用户信息: \(CACurrentMediaTime() - start)")
-        SQLManager.shared.filterUserAndChat("1002")
+        print("开始获取用户信息")
+        let start = CACurrentMediaTime()
+        SQLManager.shared.filterUsers { users in
+            print(users)
+        }
+        print("结束获取用户信息: \(CACurrentMediaTime() - start)")
     }
     
     @IBAction func deleteUsers() {
-//        SQLManager.shared.removeAllUsers()
-        print(SQLManager.shared.getUserCount())
+        SQLManager.shared.removeAllUsers()
     }
     
     @IBAction func deleteUser() {
-        SQLManager.shared.removeUser("1@163.com")
+//        SQLManager.shared.removeUser("1@163.com")
+        SQLManager.shared.sortUsers()
     }
 }
