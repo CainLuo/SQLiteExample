@@ -38,7 +38,10 @@ extension SQLManager {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
     }
-    
+}
+
+// MARK: - Users表-增
+extension SQLManager {
     /// 新建Users表的Gender行
     func insetColumnInUserTable() {
         guard !columns(table: "users", column: "gender") else {
@@ -70,6 +73,35 @@ extension SQLManager {
         }
     }
     
+    /// 批量添加用户信息到Users表，⚠️⚠️⚠️非常耗时⚠️⚠️
+    /// - Parameter models: [UserModel]
+//    func addUserInfos(_ models: [UserModel], complete: @escaping (() -> Void)) {
+//        DispatchQueue.global().async {
+//            var userSetters: [[Setter]] = []
+//
+//            models.forEach { model in
+//                let setter = [userID <- model.userID, email <- model.email, name <- model.name, gender <- model.gender]
+//                if let chat = model.chat {
+//                    self.insetChatSetings(model.userID, chat: chat)
+//                }
+//                userSetters.append(setter)
+//            }
+//
+//            do {
+//                try self.db.transaction {
+//                    do {
+//                        try self.db.run(self.users.insertMany(userSetters))
+//                        complete()
+//                    } catch {
+//                        print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
+//                    }
+//                }
+//            } catch {
+//                print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
+//            }
+//        }
+//    }
+    
     /// 批量添加用户信息到Users表
     /// - Parameter models: [UserModel]
     func addUserInfos(_ models: [UserModel]) {
@@ -91,6 +123,43 @@ extension SQLManager {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
     }
+}
+
+// MARK: - Users表-删
+extension SQLManager {
+    
+    /// 删除所有用户信息
+    func removeAllUsers() {
+        do {
+            if try db.run(users.delete()) > 0 {
+                removeAll()
+                print("👍🏻👍🏻👍🏻 -------------- 删除所有用户成功 -------------- 👍🏻👍🏻👍🏻")
+            } else {
+                print("💥💥💥 -------------- 没有找到对应得用户 -------------- 💥💥💥")
+            }
+        } catch {
+            print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
+        }
+    }
+    
+    /// 删除指定邮箱的用户信息
+    /// - Parameter uEmail: String
+    func removeUser(_ uEmail: String) {
+        let userInfo = users.filter(email == uEmail)
+        do {
+            if try db.run(userInfo.delete()) > 0 {
+                print("👍🏻👍🏻👍🏻 -------------- 删除所有用户成功 -------------- 👍🏻👍🏻👍🏻")
+            } else {
+                print("💥💥💥 -------------- 没有找到对应得用户 -------------- 💥💥💥")
+            }
+        } catch {
+            print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
+        }
+    }
+}
+
+// MARK: - Users表-改
+extension SQLManager {
     
     /// 更新Users表的用户信息
     /// - Parameters:
@@ -115,7 +184,10 @@ extension SQLManager {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
     }
-    
+}
+
+// MARK: - Users表-查
+extension SQLManager {
     /// 遍地Users表的所有用户
     func filterUsers(_ complete: ((_ userMode: [UserModel]) -> Void)) {
         do {
@@ -169,35 +241,6 @@ extension SQLManager {
                 }
                 print("User: \(user[index]), \(user[email]), \(String(describing: user[name])), \(user[balance]), \(user[verified]), \(String(describing: user[gender]))")
             })
-        } catch {
-            print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
-        }
-    }
-    
-    /// 删除所有用户信息
-    func removeAllUsers() {
-        do {
-            if try db.run(users.delete()) > 0 {
-                removeAll()
-                print("👍🏻👍🏻👍🏻 -------------- 删除所有用户成功 -------------- 👍🏻👍🏻👍🏻")
-            } else {
-                print("💥💥💥 -------------- 没有找到对应得用户 -------------- 💥💥💥")
-            }
-        } catch {
-            print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
-        }
-    }
-    
-    /// 删除指定邮箱的用户信息
-    /// - Parameter uEmail: String
-    func removeUser(_ uEmail: String) {
-        let userInfo = users.filter(email == uEmail)
-        do {
-            if try db.run(userInfo.delete()) > 0 {
-                print("👍🏻👍🏻👍🏻 -------------- 删除所有用户成功 -------------- 👍🏻👍🏻👍🏻")
-            } else {
-                print("💥💥💥 -------------- 没有找到对应得用户 -------------- 💥💥💥")
-            }
         } catch {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
