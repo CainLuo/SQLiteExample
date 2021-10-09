@@ -29,7 +29,17 @@ extension SQLManager {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
     }
-    
+
+    /// 使用Row转换成具体的模型
+    /// - Parameter row: Row
+    /// - Returns: UserChatSettingModel
+    func getChatSetting(_ row: Row) -> UserChatSettingModel {
+        UserChatSettingModel(price: row[price])
+    }
+}
+
+// MARK: - usersChatSetings表-增
+extension SQLManager {
     /// 添加用户的子信息到ChatSettings表
     /// - Parameters:
     ///   - userID: String
@@ -42,14 +52,39 @@ extension SQLManager {
         }
     }
     
-    /// 更新用户的子信息到ChatSettings表
+    /// 添加多个用户的子信息到ChatSettings表
     /// - Parameters:
     ///   - userID: String
     ///   - chat: UserChatSettingModel
-    func updateChatSetting(_ uUserID: String, chat: UserChatSettingModel) {
-        let user = usersChatSetings.filter(userID == uUserID)
+    func insetManyChatSetings(_ setters: [[Setter]]) {
         do {
-            try db.run(user.update(userID <- uUserID, price <- chat.price))
+            try db.run(usersChatSetings.insertMany(setters))
+        } catch {
+            print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
+        }
+    }
+
+    func insetMore() {
+        do {
+            let inset = usersChatSetings.insertMany([[userID <- "3", price <- "9127398"], [userID <- "4", price <- "999"]])
+            let lastRowid = try db.run(inset)
+            print("last inserted id: \(lastRowid)")
+        } catch {
+            print("insertion failed: \(error)")
+        }
+    }
+}
+
+// MARK: - usersChatSetings表-删
+extension SQLManager {
+    /// 删除ChatSettings所有的子信息
+    func removeAll() {
+        do {
+            if try db.run(usersChatSetings.delete()) > 0 {
+                print("👍🏻👍🏻👍🏻 -------------- 删除所有用户成功 -------------- 👍🏻👍🏻👍🏻")
+            } else {
+                print("💥💥💥 -------------- 没有找到对应得用户 -------------- 💥💥💥")
+            }
         } catch {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
@@ -69,7 +104,26 @@ extension SQLManager {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
     }
-    
+}
+
+// MARK: - usersChatSetings表-改
+extension SQLManager {
+    /// 更新用户的子信息到ChatSettings表
+    /// - Parameters:
+    ///   - userID: String
+    ///   - chat: UserChatSettingModel
+    func updateChatSetting(_ uUserID: String, chat: UserChatSettingModel) {
+        let user = usersChatSetings.filter(userID == uUserID)
+        do {
+            try db.run(user.update(userID <- uUserID, price <- chat.price))
+        } catch {
+            print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
+        }
+    }
+}
+
+// MARK: - usersChatSetings表-查
+extension SQLManager {
     /// 获取ChatSettings表的子信息
     /// - Parameter userID: String
     func getChatSetting(_ uUserID: String, complete: ((_ chatSetting: UserChatSettingModel) -> Void)) {
@@ -81,25 +135,5 @@ extension SQLManager {
         } catch {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
-    }
-    
-    /// 删除ChatSettings所有的子信息
-    func removeAll() {
-        do {
-            if try db.run(usersChatSetings.delete()) > 0 {
-                print("👍🏻👍🏻👍🏻 -------------- 删除所有用户成功 -------------- 👍🏻👍🏻👍🏻")
-            } else {
-                print("💥💥💥 -------------- 没有找到对应得用户 -------------- 💥💥💥")
-            }
-        } catch {
-            print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
-        }
-    }
-    
-    /// 使用Row转换成具体的模型
-    /// - Parameter row: Row
-    /// - Returns: UserChatSettingModel
-    func getChatSetting(_ row: Row) -> UserChatSettingModel {
-        UserChatSettingModel(price: row[price])
     }
 }
