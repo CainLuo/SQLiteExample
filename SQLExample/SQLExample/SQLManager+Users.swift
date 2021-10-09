@@ -287,4 +287,15 @@ extension SQLManager {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
     }
+    
+    func searchLikeUser() {
+        let query = users.filter(userID.like("922_"))
+        do {
+            try db.prepare(query).forEach({ row in
+                print(row)
+            })
+        } catch {
+            print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
+        }
+    }
 }
