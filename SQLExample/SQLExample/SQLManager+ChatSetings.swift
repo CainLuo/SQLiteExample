@@ -8,9 +8,6 @@
 import Foundation
 import SQLite
 
-// Table
-fileprivate let chatSetings = Table("usersChatSetings")
-
 // Expressions
 fileprivate let index  = Expression<Int64>("index")
 fileprivate let userID = Expression<String>("userID")
@@ -21,7 +18,7 @@ extension SQLManager {
     /// - Parameter db: Connection
     func createChatSettingsTable(_ db: Connection) {
         do {
-            try db.run(chatSetings.create(ifNotExists: true) { t in
+            try db.run(usersChatSetings.create(ifNotExists: true) { t in
                 t.column(index, primaryKey: .autoincrement)
                 // autoincrement：自动递增
                 t.column(userID, unique: true)
@@ -39,7 +36,7 @@ extension SQLManager {
     ///   - chat: UserChatSettingModel
     func insetChatSetings(_ uUserID: String, chat: UserChatSettingModel) {
         do {
-            try db.run(chatSetings.insert(userID <- uUserID, price <- chat.price))
+            try db.run(usersChatSetings.insert(userID <- uUserID, price <- chat.price))
         } catch {
             print("💥💥💥 -------------- \(error.localizedDescription) -------------- 💥💥💥")
         }
@@ -50,7 +47,7 @@ extension SQLManager {
     ///   - userID: String
     ///   - chat: UserChatSettingModel
     func updateChatSetting(_ uUserID: String, chat: UserChatSettingModel) {
-        let user = chatSetings.filter(userID == uUserID)
+        let user = usersChatSetings.filter(userID == uUserID)
         do {
             try db.run(user.update(userID <- uUserID, price <- chat.price))
         } catch {
@@ -61,7 +58,7 @@ extension SQLManager {
     /// 删除用户在ChatSettings表的子信息
     /// - Parameter userID: String
     func deleteChatSeting(_ uUserID: String) {
-        let userInfo = chatSetings.filter(userID == uUserID)
+        let userInfo = usersChatSetings.filter(userID == uUserID)
         do {
             if try db.run(userInfo.delete()) > 0 {
                 print("👍🏻👍🏻👍🏻 -------------- 删除所有用户成功 -------------- 👍🏻👍🏻👍🏻")
@@ -76,7 +73,7 @@ extension SQLManager {
     /// 获取ChatSettings表的子信息
     /// - Parameter userID: String
     func getChatSetting(_ uUserID: String, complete: ((_ chatSetting: UserChatSettingModel) -> Void)) {
-        let query = chatSetings.filter(userID == uUserID)
+        let query = usersChatSetings.filter(userID == uUserID)
         do {
             try db.prepare(query).forEach({ user in
                 complete(UserChatSettingModel(price: user[price]))
@@ -89,7 +86,7 @@ extension SQLManager {
     /// 删除ChatSettings所有的子信息
     func removeAll() {
         do {
-            if try db.run(chatSetings.delete()) > 0 {
+            if try db.run(usersChatSetings.delete()) > 0 {
                 print("👍🏻👍🏻👍🏻 -------------- 删除所有用户成功 -------------- 👍🏻👍🏻👍🏻")
             } else {
                 print("💥💥💥 -------------- 没有找到对应得用户 -------------- 💥💥💥")
