@@ -80,6 +80,7 @@ class ViewController: UIViewController {
     @IBAction func deleteUser() {
 //        SQLManager.shared.removeUser("1@163.com")
 //        SQLManager.shared.sortUsers()
-        SQLManager.shared.insetMore()
+//        SQLManager.shared.insetMore()
+        SQLManager.shared.searchLikeUser()
     }
 }
